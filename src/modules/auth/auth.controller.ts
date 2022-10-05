@@ -6,10 +6,8 @@ import { AuthService } from './auth.service';
 @Controller()
 export class AuthController {
   constructor(private authService: AuthService) {}
-
-  @UseGuards(AuthGuard('local'))
   @Post('auth/login')
   async login(@Request() req) {
-    return this.authService.login(req.user);
+    return this.authService.login(req.body);
   }
 }
