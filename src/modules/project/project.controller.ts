@@ -6,43 +6,47 @@ import {
   Param,
   Patch,
   Post,
-  UseGuards,
+  Query,
 } from '@nestjs/common';
 
 import { Roles } from 'src/common/decorator/roles.decorator';
-import { RolesGuard } from 'src/common/guards/roles.guard';
+import { Role } from 'src/common/enum/role.enum';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { ProjectService } from './project.service';
 
-@UseGuards(RolesGuard)
 @Controller('project')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
-  @Post('create')
-  @Roles('admin')
+  @Roles(Role.Admin)
+  @Post('create-new-project')
   createProject(@Body() createProjectDto: CreateProjectDto) {
     return this.projectService.createProject(createProjectDto);
   }
 
-  @Patch('edit/:id')
+  @Patch('edit-project/:id')
   updateProject(@Body() updateProjectDto: UpdateProjectDto, @Param('id') id) {
     return this.projectService.updateProject(id, updateProjectDto);
   }
 
-  @Get(':id')
+  @Get('view-project/:id')
   viewProject(@Param('id') id) {
     return this.projectService.viewProject(id);
   }
 
-  @Get()
+  @Get('list-project')
   listProject() {
     return this.projectService.getListProject();
   }
 
-  @Delete('remove/:id')
+  @Delete('remove-project/:id')
   deleteProject(@Param('id') id) {
     return this.projectService.deleteProject(id);
+  }
+
+  @Get('filter')
+  async filter(@Query() query) {
+    return this.projectService.filter(query);
   }
 }

@@ -22,6 +22,7 @@ export class AuthService {
     if (!passwordValid) {
       return null;
     }
+
     return user;
   }
 

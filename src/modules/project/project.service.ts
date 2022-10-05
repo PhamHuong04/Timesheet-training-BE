@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { CreateProjectDto } from './dto/create-project.dto';
+import { FilterProjectDTO } from './dto/filter-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { Project } from './model/project.model';
 
@@ -55,5 +56,11 @@ export class ProjectService {
     return project;
   }
 
-  // async filter() {}
+  async filter(query: FilterProjectDTO) {
+    const projects = await this.projectModel.find(query);
+    if (!projects) {
+      throw new NotFoundException('not found project');
+    }
+    return { projects, count: projects.length };
+  }
 }

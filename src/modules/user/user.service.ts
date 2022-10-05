@@ -12,16 +12,24 @@ export class UserService {
     private readonly userModel: Model<User>,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto) {
-    return await this.userModel.create(createUserDto);
+  async validateUser(username: string) {
+    const user = await this.getUser({ username });
+    if (user) {
+      return false;
+    }
+
+    return true;
   }
 
-  // async createUser(): Promise<User> {
-  //   return this.userModel.create({
-  //     username,
-  //     password,
-  //   });
-  // }
+  async createUser(createUserDto: CreateUserDto) {
+    const checkUser = await this.validateUser(createUserDto.username);
+    if (!checkUser) {
+      return {
+        message: 'user is exit',
+      };
+    }
+    return await this.userModel.create(createUserDto);
+  }
 
   async getUser(query: object): Promise<User> {
     return this.userModel.findOne(query);
