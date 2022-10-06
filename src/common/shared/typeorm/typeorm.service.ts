@@ -11,8 +11,6 @@ export class TypeOrmConfigSerivce implements TypeOrmOptionsFactory {
       type: 'mongodb',
       host: this.config.get<string>('MONGODB_HOST', 'localhost'),
       port: this.config.get<number>('MONGODB_PORT'),
-      username: this.config.get<string>('MONGODB_USERNAME'),
-      password: this.config.get<string>('MONGODB_PASSWORD'),
       database: this.config.get<string>('MONGODB_DATABASE'),
       autoLoadEntities: true,
       synchronize: true,

@@ -5,9 +5,9 @@ import {
   IsDateString,
   IsNumber,
 } from 'class-validator';
+
 import { Status } from 'src/common/emun/active-project.enum';
 import { ProjectType } from 'src/common/emun/project-type.enum';
-
 import { ProjectTargetUserDto } from './project-target-user.dto';
 import { ProjectTaskDto } from './project-task.dto';
 import { ProjectUsersDto } from './project-users.dto';

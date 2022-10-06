@@ -15,13 +15,12 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { Action } from '../ability/ability.factory';
 import { AuthGuard } from '@nestjs/passport';
 import { AbilitiesGuard } from '../ability/abilities.guard';
-import { User } from '../common/decorator/user.decorator';
 import { User as UserEntity } from './entities/user.entity';
 import { ObjectID } from 'typeorm';
 
 @Controller('user')
-// @UseGuards(AuthGuard('jwt'), AbilitiesGuard)
-// @CheckAbilities({ action: Action.MANAGE_USER, subject: UserEntity })
+@UseGuards(AuthGuard('jwt'), AbilitiesGuard)
+@CheckAbilities({ action: Action.MANAGE_USER, subject: UserEntity })
 export class UserController {
   constructor(private readonly usersService: UserService) {}
 
@@ -39,13 +38,6 @@ export class UserController {
   async createUser(@Body() body: CreateUserDto): Promise<UserEntity> {
     return this.usersService.createUserWithoutCreator(body);
   }
-  // @Post('create-new-user')
-  // async createUser(
-  //   @Body() body: CreateUserDto,
-  //   @User() user: UserEntity,
-  // ): Promise<UserEntity> {
-  //   return this.usersService.createUser(body, user.id);
-  // }
 
   @Patch(':userId')
   async updateUser(

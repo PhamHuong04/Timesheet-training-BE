@@ -1,10 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  UnauthorizedException,
-  HttpException,
-  HttpStatus,
-} from '@nestjs/common';
+import { Inject, Injectable, HttpException, HttpStatus } from '@nestjs/common';
 
 import { AuthCredentialDto } from './dto/auth.credential';
 import { JwtPayload } from './jwt-payload.interface';
@@ -31,7 +25,7 @@ export class AuthService {
     const user = await this.userRepository.findOne({ where: { email } });
 
     if (!user) {
-      throw new HttpException('No user found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Not found user', HttpStatus.NOT_FOUND);
     }
 
     const isPasswordValid: boolean = this.helper.isPasswordValid(
@@ -47,8 +41,6 @@ export class AuthService {
       const payload: JwtPayload = { id: user.id };
       const accessToken: string = await this.jwtService.sign(payload);
       return { accessToken };
-    } else {
-      throw new UnauthorizedException();
     }
   }
 }
