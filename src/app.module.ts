@@ -1,30 +1,23 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-
-import { AuthModule } from './modules/auth/auth.module';
-import { UserModule } from './modules/user/user.module';
-import { ProjectModule } from './modules/project/project.module';
-import { HttpExceptionFilter } from './common/filter/http-exception.filter';
-import { RolesGuard } from './common/guards/roles.guard';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { ProjectModule } from './project/project.module';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { configEnvPath } from './common/helper/env.helper';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmConfigSerivce } from './common/shared/typeorm/typeorm.service';
 
 @Module({
   imports: [
-    AuthModule,
-    UserModule,
-    MongooseModule.forRoot('mongodb://localhost:27017/timesheet-training'),
+    ConfigModule.forRoot(configEnvPath),
+    TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigSerivce }),
     ProjectModule,
+    UserModule,
+    AuthModule,
   ],
-  controllers: [],
-  providers: [
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
-  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
