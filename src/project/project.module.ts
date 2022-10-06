@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { ProjectController } from './project.controller';
 import { AbilityModule } from '../ability/ability.module';
-import { Project } from './entities/project.entity';
+import { Project } from './entities/project.entities';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({

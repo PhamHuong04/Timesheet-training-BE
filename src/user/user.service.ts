@@ -7,7 +7,8 @@ import {
 } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { ObjectID, Repository } from 'typeorm';
+import mongodb from 'mongodb';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthHelper } from './auth.helper';
@@ -24,8 +25,8 @@ export class UserService {
 
   private logger = new Logger('UserService');
 
-  async getUserById(id: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id } });
+  async getUserById(id): Promise<User> {
+    const user = await this.userRepository.findOne(id);
     if (!user) {
       throw new NotFoundException(`User with ID: ${id} not found`);
     }
@@ -47,10 +48,6 @@ export class UserService {
       },
     });
   }
-
-  // getUserByCreatorId(creator_id: string): Promise<User | undefined> {
-  //   return this.userRepository.findOne({ where: { creator_id } });
-  // }
 
   async getUsers(): Promise<User[]> {
     return this.userRepository.find();

@@ -42,9 +42,9 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new HttpException('Wrong password', HttpStatus.NOT_FOUND);
     }
-    this.userRepository.update(user.id, { lastLoginAt: new Date() });
+
     if (user && isPasswordValid) {
-      const payload: JwtPayload = { userId: user.id };
+      const payload: JwtPayload = { id: user.id };
       const accessToken: string = await this.jwtService.sign(payload);
       return { accessToken };
     } else {

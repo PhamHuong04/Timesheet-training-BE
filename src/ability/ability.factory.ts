@@ -6,7 +6,7 @@ import {
   AbilityClass,
   ExtractSubjectType,
 } from '@casl/ability';
-import { Project } from '../project/entities/project.entity';
+import { Project } from '../project/entities/project.entities';
 import { User as UserEntity } from '../user/entities/user.entity';
 
 export enum Action {

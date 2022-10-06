@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -15,9 +16,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { AbilitiesGuard } from '../ability/abilities.guard';
 import { CheckAbilities } from '../ability/abilities.decorator';
 import { Action } from '../ability/ability.factory';
-import { Project } from './entities/project.entity';
-import { User } from '../common/decorator/user.decorator';
-import { User as UserEntity } from '../user/entities/user.entity';
+import { Project } from './entities/project.entities';
+import { ObjectID } from 'typeorm';
 
 @Controller('project')
 @UseGuards(AuthGuard('jwt'), AbilitiesGuard)
@@ -26,28 +26,36 @@ export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @Post('create-new-project')
-  async create(@Body() body: CreateProjectDto, @User() user: UserEntity) {
-    return await this.projectService.create(body, user.id);
+  async create(@Body() body: CreateProjectDto) {
+    return await this.projectService.create(body);
   }
 
-  @Get('get-all-projects')
+  @Get('filter')
+  async filter(@Query() query) {
+    return this.projectService.filter(query);
+  }
+
+  @Get('all-projects')
   findAll() {
     return this.projectService.findAll();
   }
 
   @Get(':id')
-  findByProjectId(@Param('id') id: string) {
+  findByProjectId(@Param('id') id: ObjectID) {
     const result = this.projectService.findByProjectId(id);
     return result;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
+  update(
+    @Param('id') id: ObjectID,
+    @Body() updateProjectDto: UpdateProjectDto,
+  ) {
     return this.projectService.update(id, updateProjectDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: ObjectID) {
     return this.projectService.remove(id);
   }
 }

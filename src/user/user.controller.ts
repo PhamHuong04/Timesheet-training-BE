@@ -17,10 +17,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { AbilitiesGuard } from '../ability/abilities.guard';
 import { User } from '../common/decorator/user.decorator';
 import { User as UserEntity } from './entities/user.entity';
+import { ObjectID } from 'typeorm';
 
 @Controller('user')
-@UseGuards(AuthGuard('jwt'), AbilitiesGuard)
-@CheckAbilities({ action: Action.MANAGE_USER, subject: UserEntity })
+// @UseGuards(AuthGuard('jwt'), AbilitiesGuard)
+// @CheckAbilities({ action: Action.MANAGE_USER, subject: UserEntity })
 export class UserController {
   constructor(private readonly usersService: UserService) {}
 
@@ -30,7 +31,7 @@ export class UserController {
   }
 
   @Get(':id')
-  async getUser(@Param('id') id: string): Promise<UserEntity> {
+  async getUser(@Param('id') id: ObjectID): Promise<UserEntity> {
     return this.usersService.getUserById(id);
   }
 
