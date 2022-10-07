@@ -14,9 +14,7 @@ export class ProjectService {
   ) {}
 
   async create(body: CreateProjectDto): Promise<Project> {
-    const project = new Project();
-    project.name = body.name;
-    return await this.projectRepository.save(project);
+    return await this.projectRepository.save(body);
   }
 
   async findAll() {

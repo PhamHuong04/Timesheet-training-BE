@@ -10,34 +10,34 @@ export class Project {
   @ObjectIdColumn()
   id: ObjectID;
 
-  @Column()
+  @Column({ nullable: false })
   clientId: number;
 
-  @Column()
+  @Column({ nullable: false })
   name: string;
 
-  @Column()
+  @Column({ nullable: false })
   code: string;
 
-  @Column()
+  @Column({ nullable: false })
   dateAt: string;
 
-  @Column()
+  @Column({ nullable: false })
   dateEnd: string;
 
   @Column()
   note: string;
 
-  @Column()
+  @Column({ nullable: false })
   type: ProjectType;
 
-  @Column()
+  @Column({ nullable: false })
   users: ProjectUsersDto[];
 
-  @Column()
+  @Column({ nullable: false })
   tasks: ProjectTaskDto[];
 
-  @Column()
+  @Column({ nullable: false })
   status: number;
 
   @Column()

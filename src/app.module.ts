@@ -9,6 +9,8 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { configEnvPath } from './common/helper/env.helper';
 import { TypeOrmConfigSerivce } from './common/shared/typeorm/typeorm.service';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './filter/http-exception.filter';
 
 @Module({
   imports: [
@@ -19,6 +21,12 @@ import { TypeOrmConfigSerivce } from './common/shared/typeorm/typeorm.service';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}
