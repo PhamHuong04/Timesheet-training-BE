@@ -7,6 +7,7 @@ import { User } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { AuthHelper } from '../user/auth.helper';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -42,5 +43,26 @@ export class AuthService {
       const accessToken: string = await this.jwtService.sign(payload);
       return { accessToken };
     }
+  }
+
+  async register(authCredentialDto: CreateUserDto) {
+    const user: User = await this.userRepository.findOne({
+      where: { email: authCredentialDto.email },
+    });
+
+    if (user) {
+      throw new HttpException(
+        'This user already exists in the system',
+        HttpStatus.CONFLICT,
+      );
+    }
+
+    authCredentialDto.password = this.helper.encodePassword(
+      authCredentialDto.password,
+    );
+    authCredentialDto.isAdmin = false;
+    authCredentialDto.isProjectManager = false;
+
+    return await this.userRepository.save(authCredentialDto);
   }
 }

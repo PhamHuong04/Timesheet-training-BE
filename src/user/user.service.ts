@@ -5,14 +5,14 @@ import {
   HttpException,
   NotFoundException,
 } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
+
+import { ObjectID, Repository } from 'typeorm';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { ObjectID, Repository } from 'typeorm';
-import mongodb from 'mongodb';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { AuthHelper } from './auth.helper';
-import { Logger } from '@nestjs/common';
 @Injectable()
 export class UserService {
   constructor(
@@ -94,16 +94,21 @@ export class UserService {
     });
   }
 
-  async updateUser(userId, userUpdates: UpdateUserDto): Promise<User> {
-    await this.userRepository.update({ id: userId }, userUpdates);
-    return await this.userRepository.findOne({
-      where: {
-        id: userId,
-      },
-    });
+  async updateUser(id, userUpdates: UpdateUserDto) {
+    const user = await this.userRepository.findOne(id);
+    if (!user) {
+      throw new NotFoundException(`User with ID: ${id} not found`);
+    }
+    await this.userRepository.update(id, userUpdates);
+    return `update successfully`;
   }
 
-  deleteUser(userId) {
-    return this.userRepository.delete(userId);
+  async deleteUser(userId) {
+    const user = await this.userRepository.findOne(userId);
+    if (!user) {
+      throw new NotFoundException(`User with ID: ${userId} not found`);
+    }
+    await this.userRepository.delete(userId);
+    return `delete successfully`;
   }
 }

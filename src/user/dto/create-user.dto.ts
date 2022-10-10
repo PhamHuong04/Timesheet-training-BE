@@ -2,6 +2,7 @@ import {
   IsBoolean,
   IsEmail,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Matches,
   MaxLength,
@@ -10,9 +11,11 @@ import {
 
 export class CreateUserDto {
   @IsString()
+  @IsOptional()
   firstName: string;
 
   @IsString()
+  @IsOptional()
   lastName: string;
 
   @IsEmail()
@@ -29,8 +32,10 @@ export class CreateUserDto {
   password: string;
 
   @IsBoolean()
+  @IsOptional()
   isAdmin: boolean;
 
   @IsBoolean()
+  @IsOptional()
   isProjectManager: boolean;
 }

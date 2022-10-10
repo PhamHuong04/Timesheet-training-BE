@@ -41,9 +41,9 @@ export class UserController {
 
   @Patch(':userId')
   async updateUser(
-    @Param('userId') userId: string,
+    @Param('userId') userId: ObjectID,
     @Body() updateUserDto: UpdateUserDto,
-  ): Promise<UserEntity> {
+  ) {
     return this.usersService.updateUser(userId, updateUserDto);
   }
 

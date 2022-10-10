@@ -21,9 +21,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
         : (exceoptionResponse as object);
 
     return response.status(status).json({
-      ...error,
+      error,
       timestamp: new Date().toISOString(),
       path: request.path,
+      message: exception.message,
     });
   }
 }

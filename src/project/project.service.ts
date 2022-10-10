@@ -25,33 +25,31 @@ export class ProjectService {
     return { projects, count: projects.length };
   }
 
-  async findByProjectId(id: ObjectID) {
-    const project = await this.projectRepository.findOne({
-      where: {
-        id,
-      },
-    });
+  async findByProjectId(id) {
+    const project = await this.projectRepository.findOne(id);
     if (!project) {
       throw new NotFoundException(`Project with ID: ${id} not found`);
     }
     return project;
   }
 
-  async update(id: ObjectID, body: UpdateProjectDto) {
-    const project = await this.projectRepository.findOne({
-      where: {
-        id,
-      },
-    });
+  async update(id, body: UpdateProjectDto) {
+    const project = await this.projectRepository.findOne(id);
     if (!project) {
       throw new NotFoundException(`Project with ID: ${id} not found`);
     }
 
-    return await this.projectRepository.update(id, body);
+    await this.projectRepository.update(id, body);
+    return `update successfully`;
   }
 
-  remove(id: ObjectID) {
-    return this.projectRepository.delete(id);
+  async remove(id) {
+    const project = await this.projectRepository.findOne(id);
+    if (!project) {
+      throw new NotFoundException(`Project with ID: ${id} not found`);
+    }
+    await this.projectRepository.delete(id);
+    return `delete successfully`;
   }
 
   async filter(query) {
