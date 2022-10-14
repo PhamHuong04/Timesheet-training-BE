@@ -19,8 +19,8 @@ import { User } from '../common/decorator/user.decorator';
 import { User as UserEntity } from './entities/user.entity';
 
 @Controller('user')
-@UseGuards(AuthGuard('jwt'), AbilitiesGuard)
-@CheckAbilities({ action: Action.MANAGE_USER, subject: UserEntity })
+// @UseGuards(AuthGuard('jwt'), AbilitiesGuard)
+// @CheckAbilities({ action: Action.MANAGE_USER, subject: UserEntity })
 export class UserController {
   constructor(private readonly usersService: UserService) {}
 
